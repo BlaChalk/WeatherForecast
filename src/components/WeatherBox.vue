@@ -1,19 +1,14 @@
 <template lang="pug">
-#app
-  h1 氣象預報觀測資料
-  WeatherBox.weatherBox
-  //- .cityList(v-for="weatherData in weatherDatas") {{ weatherData.locationName }} 
+#weatherBox
+  .top
+    .background
 
 </template>
+
 <script>
 import axios from 'axios'
-import WeatherBox from './components/WeatherBox.vue'
 
 export default {
-  name: 'App',
-  components: {
-    WeatherBox
-  },
   data() {
     return {
       weatherDatas: null
@@ -45,17 +40,24 @@ export default {
 }
 </script>
 
-<style lang="sass">
-#app
-  font-family: Avenir, Helvetica, Arial, sans-serif
-  -webkit-font-smoothing: antialiased
-  -moz-osx-font-smoothing: grayscale
-  text-align: center
-  color: #2c3e50
-  margin-top: 60px
+<style lang="sass" scoped>
 
-.weatherBox
-  left: 50%
-  transform: translateX(-50%)
-  
+*
+  font-family: 'Inconsolata', monospace, 微軟正黑體
+  // border: solid 1px
+  position: relative
+  user-select: none
+
+#weatherBox
+  width: 100%
+  max-width: 700px
+  overflow: hidden
+  border-radius: 20px
+  box-shadow: 5px 10px 20px rgba(black,0.4)
+
+.top
+  .background
+    height: 400px
+    background-image: url('~@/assets/extra_large.jpg')
+    background-size: cover
 </style>
