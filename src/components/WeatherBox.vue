@@ -11,7 +11,7 @@
         .temperature {{ weatherData.weatherElement[1].time[0].elementValue[0].value }}°C
         .infos
           .date {{ getDate() }}
-          .time {{ getTime() }}
+          .time {{ time }} {{ getTimePerSecond() }}
           .address {{ weatherData.locationName }}
 </template>
 
@@ -23,14 +23,17 @@ export default {
   data() {
     return {
       weatherDatas: null,
+      time: null
     }
   },
   methods: {
-    getDate: ()=>{
+    getDate () {
       return moment().format('MMMM D') 
     },
-    getTime: ()=>{
-      return moment().format('ddd H:mm') 
+    getTimePerSecond () {
+      setInterval(() => {
+        this.time = moment().format('ddd HH:mm') 
+      }, 1000);
     }
   },
   mounted () {
