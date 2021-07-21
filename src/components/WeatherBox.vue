@@ -2,6 +2,10 @@
 #weatherBox
   .top
     .background
+    .weather-measures
+      .UVI 紫外線指數：9
+      .RH 平均濕度：63%
+      .PoP12h 降雨機率：20%(12小時內)
     .text-area
       .temperature 27°C
       .infos
@@ -59,11 +63,34 @@ $font_size: 18px
   border-radius: 20px
   box-shadow: 5px 10px 20px rgba(black,0.4)
 
+  &:hover
+    .top
+      height: 450px
+      .background
+        top: 30px
+      .weather-measures
+        opacity: 1
+
 .top
+  height: 400px
+  transition: 1s
   .background
     height: 350px
+    top: 0px
     background-image: url('~@/assets/extra_large.jpg')
     background-size: cover
+    transition: 1s
+  .weather-measures
+    display: flex
+    flex-direction: column
+    opacity: 0
+    position: absolute
+    left: 20px
+    top: 20px
+    font-weight: normal
+    font-size: $font_size
+    text-align: left
+    transition: 1s
   .text-area
     display: flex
     left: 20px
