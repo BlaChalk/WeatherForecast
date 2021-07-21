@@ -1,25 +1,36 @@
 <template lang="pug">
 #weatherBox
-  .top
-    .background
-    .weather-measures
-      .UVI 紫外線指數：9
-      .RH 平均濕度：63%
-      .PoP12h 降雨機率：20%(12小時內)
-    .text-area
-      .temperature 27°C
-      .infos
-        .time WEN. 11:50PM
-        .address 台中市
+  .cityList(v-for="weatherData in weatherDatas" v-show="weatherData.locationName === '臺中市'")
+    .top
+      .background
+      .weather-measures
+        .UVI 紫外線指數：{{ weatherData.weatherElement[9].time[0].elementValue[0].value }}
+        .RH 平均濕度：{{ weatherData.weatherElement[2].time[0].elementValue[0].value }}%
+        .PoP12h 降雨機率：{{ weatherData.weatherElement[0].time[0].elementValue[0].value }}%(12小時內)
+      .text-area
+        .temperature {{ weatherData.weatherElement[1].time[0].elementValue[0].value }}°C
+        .infos
+          .date {{ getDate() }}
+          .time {{ getTime() }}
+          .address {{ weatherData.locationName }}
 </template>
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 
 export default {
   data() {
     return {
-      weatherDatas: null
+      weatherDatas: null,
+    }
+  },
+  methods: {
+    getDate: ()=>{
+      return moment().format('MMMM D') 
+    },
+    getTime: ()=>{
+      return moment().format('ddd H:mm') 
     }
   },
   mounted () {
@@ -44,7 +55,7 @@ export default {
         console.log(error.message)
       }
     })
-  }
+  },
 }
 </script>
 
