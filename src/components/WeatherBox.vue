@@ -2,7 +2,11 @@
 #weatherBox
   .top
     .background
-
+    .text-area
+      .temperature 27°C
+      .infos
+        .time WEN. 11:50PM
+        .address 台中市
 </template>
 
 <script>
@@ -41,9 +45,9 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-
+$font_size: 18px 
 *
-  font-family: 'Inconsolata', monospace, 微軟正黑體
+  font-family: monospace, 微軟正黑體
   // border: solid 1px
   position: relative
   user-select: none
@@ -57,7 +61,25 @@ export default {
 
 .top
   .background
-    height: 400px
+    height: 350px
     background-image: url('~@/assets/extra_large.jpg')
     background-size: cover
+  .text-area
+    display: flex
+    left: 20px
+    bottom: 30px
+    font-weight: normal
+    font-size: $font_size
+    .temperature
+      font-size: $font_size*3
+      font-weight: bold
+      margin-right: 30px
+    .infos
+      display: flex
+      flex-direction: column-reverse
+      text-align: left
+      margin-bottom: 5px
+      .address
+        font-size: $font_size*1.2
+        letter-spacing: 2px
 </style>
