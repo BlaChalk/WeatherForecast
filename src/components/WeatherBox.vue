@@ -15,67 +15,82 @@
           .time {{ getTimePerSecond() }}
           .address {{ weatherData.locationName }}
     .bottom
-      .dayweather
-        h4 MON
-        svg(viewBox="-50 -50 100 100")
-          circle.sun(cx=0 cy=0 r=25)
-        .temperature
-          h5.high 32°C
-          h5.low 28°C
-      .dayweather
-        h4 TUE
-        svg(viewBox="-60 -50 100 120")
-          circle.sun(cx=0 cy=0 r=20)
-          circle.cloud(cx=0 cy=30 r=20)
-          circle.cloud(cx=-15 cy=30 r=20)
-          circle.cloud(cx=-30 cy=30 r=20)
-          circle.cloud(cx=-20 cy=10 r=15)
-          circle.cloud(cx=-7 cy=15 r=15)
-        .temperature
-          h5.high 32°C
-          h5.low 28°C
-      .dayweather
-        h4 WED
-        svg(viewBox="-50 -20 100 100")
-          line.rain(x1=-20 y1=5 x2=-20 y2=25)
-          line.rain.rain2(x1=-10 y1=25 x2=-10 y2=35)
-          line.rain.rain3(x1=4 y1=5 x2=4 y2=25)
-          circle.cloud(cx=10 cy=30 r=20)
-          circle.cloud(cx=-5 cy=30 r=20)
-          circle.cloud(cx=-20 cy=30 r=20)
-          circle.cloud(cx=-10 cy=10 r=15)
-          circle.cloud(cx=-3 cy=15 r=15)
-        .temperature
-          h5.high 32°C
-          h5.low 28°C
-      .dayweather
-        h4 THU
-        svg(viewBox="-50 -50 100 100")
-          circle.sun(cx=0 cy=0 r=25)
-        .temperature
-          h5.high 32°C
-          h5.low 28°C
-      .dayweather
-        h4 FRI
-        svg(viewBox="-50 -50 100 100")
-          circle.sun(cx=0 cy=0 r=25)
-        .temperature
-          h5.high 32°C
-          h5.low 28°C
-      .dayweather
-        h4 SAT
-        svg(viewBox="-50 -50 100 100")
-          circle.sun(cx=0 cy=0 r=25)
-        .temperature
-          h5.high 32°C
-          h5.low 28°C
-      .dayweather
-        h4 SUN
-        svg(viewBox="-50 -50 100 100")
-          circle.sun(cx=0 cy=0 r=25)
-        .temperature
-          h5.high 32°C
-          h5.low 28°C
+      .dayweather(v-for="item in 7" :key="item.id")
+        .check(v-if="item === 0")
+          h4 {{ getDayOfTheWeek(weatherData.weatherElement[1].time[0].endTime) }}
+          svg(viewBox="-50 -50 100 100")
+            circle.sun(cx=0 cy=0 r=25)
+          .temperature
+            h5.high {{ weatherData.weatherElement[12].time[0].elementValue[0].value }}°C
+            h5.low {{ weatherData.weatherElement[8].time[0].elementValue[0].value }}°C
+        .check(v-else-if="getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime) === '18'")
+          h4 {{ getDayOfTheWeek(weatherData.weatherElement[1].time[(item-1)*2].endTime) }}
+          svg(viewBox="-50 -50 100 100")
+            circle.sun(cx=0 cy=0 r=25)
+          .temperature
+            h5.high {{ weatherData.weatherElement[12].time[(item-1)*2].elementValue[0].value }}°C
+            h5.low {{ weatherData.weatherElement[8].time[(item-1)*2].elementValue[0].value }}°C
+        .check(v-else)
+          h4 {{ getDayOfTheWeek(weatherData.weatherElement[1].time[item*2-1].endTime) }}
+          svg(viewBox="-50 -50 100 100")
+            circle.sun(cx=0 cy=0 r=25)
+          .temperature
+            h5.high {{ weatherData.weatherElement[12].time[item*2-1].elementValue[0].value }}°C
+            h5.low {{ weatherData.weatherElement[8].time[item*2-1].elementValue[0].value }}°C
+      //- .dayweather
+      //-   h4 TUE
+      //-   svg(viewBox="-60 -50 100 120")
+      //-     circle.sun(cx=0 cy=0 r=20)
+      //-     circle.cloud(cx=0 cy=30 r=20)
+      //-     circle.cloud(cx=-15 cy=30 r=20)
+      //-     circle.cloud(cx=-30 cy=30 r=20)
+      //-     circle.cloud(cx=-20 cy=10 r=15)
+      //-     circle.cloud(cx=-7 cy=15 r=15)
+      //-   .temperature
+      //-     h5.high 32°C
+      //-     h5.low 28°C
+      //- .dayweather
+      //-   h4 WED
+      //-   svg(viewBox="-50 -20 100 100")
+      //-     line.rain(x1=-20 y1=5 x2=-20 y2=25)
+      //-     line.rain.rain2(x1=-10 y1=25 x2=-10 y2=35)
+      //-     line.rain.rain3(x1=4 y1=5 x2=4 y2=25)
+      //-     circle.cloud(cx=10 cy=30 r=20)
+      //-     circle.cloud(cx=-5 cy=30 r=20)
+      //-     circle.cloud(cx=-20 cy=30 r=20)
+      //-     circle.cloud(cx=-10 cy=10 r=15)
+      //-     circle.cloud(cx=-3 cy=15 r=15)
+      //-   .temperature
+      //-     h5.high 32°C
+      //-     h5.low 28°C
+      //- .dayweather
+      //-   h4 THU
+      //-   svg(viewBox="-50 -50 100 100")
+      //-     circle.sun(cx=0 cy=0 r=25)
+      //-   .temperature
+      //-     h5.high 32°C
+      //-     h5.low 28°C
+      //- .dayweather
+      //-   h4 FRI
+      //-   svg(viewBox="-50 -50 100 100")
+      //-     circle.sun(cx=0 cy=0 r=25)
+      //-   .temperature
+      //-     h5.high 32°C
+      //-     h5.low 28°C
+      //- .dayweather
+      //-   h4 SAT
+      //-   svg(viewBox="-50 -50 100 100")
+      //-     circle.sun(cx=0 cy=0 r=25)
+      //-   .temperature
+      //-     h5.high 32°C
+      //-     h5.low 28°C
+      //- .dayweather
+      //-   h4 SUN
+      //-   svg(viewBox="-50 -50 100 100")
+      //-     circle.sun(cx=0 cy=0 r=25)
+      //-   .temperature
+      //-     h5.high 32°C
+      //-     h5.low 28°C
 
           
 </template>
@@ -101,6 +116,12 @@ export default {
         this.time = moment().format('ddd HH:mm') 
       }, 1000);
       return this.time
+    },
+    getDayOfTheWeek (value) {
+      return moment(value).format('ddd').toUpperCase() 
+    },
+    getHourOfTheDay (value) {
+      return moment(value).format('H')
     }
   },
   mounted () {
