@@ -46,13 +46,20 @@ export default {
 </script>
 
 <style lang="sass">
+
+html, body
+  margin: 0
+
+h1
+  margin-top: 15px
+  margin-bottom: 15px
+
 #app
   font-family: Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
   text-align: center
   color: #2c3e50
-  margin-top: 60px
 
 .weatherBox
   left: 50%
