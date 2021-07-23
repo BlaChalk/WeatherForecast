@@ -1,6 +1,6 @@
 <template lang="pug">
 #weatherBox
-  .cityList(v-for="weatherData in weatherDatas" v-show="weatherData.locationName === '臺中市'")
+  .cityList(v-for="weatherData in weatherDatas" v-show="weatherData.locationName === '臺中市'" @mouseleave="userSelectDay = 1")
     .top
       .background
       h3.weather-status {{ weatherData.weatherElement[6].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}
@@ -42,12 +42,12 @@ export default {
   },
   methods: {
     getDate () {
-      return moment().format('MMMM D') 
+      return moment().add(this.userSelectDay-1, 'd').format('MMMM D') 
     },
     getTimePerSecond () {
-      this.time = moment().format('ddd HH:mm') 
+      this.time = moment().add(this.userSelectDay-1, 'd').format('ddd HH:mm') 
       setInterval(() => {
-        this.time = moment().format('ddd HH:mm') 
+        this.time = moment().add(this.userSelectDay-1, 'd').format('ddd HH:mm') 
       }, 1000);
       return this.time
     },
@@ -61,8 +61,9 @@ export default {
       this.userSelectDay = value
     },
     getWeatherArrayNumber (number, endTime) {
-      if (number === '1')
+      if (number === '1') {
         return 0
+      }
       else if (endTime === '18') {
         return (number-1)*2
       } else {
