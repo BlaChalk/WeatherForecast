@@ -1,6 +1,6 @@
 <template lang="pug">
 #weatherBox
-  .cityList(v-for="weatherData in weatherDatas" v-show="weatherData.locationName === '臺中市'" @mouseleave="userSelectDay = 1")
+  .weatherDetail(v-for="weatherData in weatherDatas" v-show="weatherData.locationName === '臺中市'" @mouseleave="userSelectDay = 1")
     .top
       .background
       h3.weather-status {{ weatherData.weatherElement[6].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}
@@ -21,6 +21,7 @@
           .temperature
             h5.high {{ weatherData.weatherElement[12].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
             h5.low {{ weatherData.weatherElement[8].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
+  LocationSwiper.locationSwiper(:weatherDatas="weatherDatas")
           
 </template>
 
@@ -28,10 +29,12 @@
 import axios from 'axios'
 import moment from 'moment'
 import WeatherIcon from '@/components/WeatherIcon.vue'
+import LocationSwiper from '@/components/LocationSwiper.vue'
 
 export default {
+  name: 'WeatherBox',
   components: {
-    WeatherIcon
+    WeatherIcon, LocationSwiper
   },
   data() {
     return {
@@ -61,12 +64,13 @@ export default {
       this.userSelectDay = value
     },
     getWeatherArrayNumber (number, endTime) {
-      if (number === '1') {
+      if (number === 1) {
         return 0
-      }
+      } 
       else if (endTime === '18') {
         return (number-1)*2
-      } else {
+      } 
+      else {
         return (number-1)*2-1
       }
     }
@@ -115,6 +119,10 @@ $color_rain: #4DACFF
 #weatherBox
   width: 100%
   max-width: 700px
+  display: flex
+  flex-direction: column
+
+.weatherDetail
   overflow: hidden
   border-radius: 20px
   box-shadow: 5px 10px 20px rgba(black,0.4)
@@ -133,7 +141,9 @@ $color_rain: #4DACFF
       opacity: 1
       .dayweather
         .temperature
-          opacity: 1
+          opacity: 1  
+    ~ .locationSwiper
+      display: none
 
 .top
   height: 400px
