@@ -1,14 +1,20 @@
 <template>
-<swiper :slidesPerView="7" 
+<swiper 
+  :slideToClickedSlide="true"
+  :centeredSlides="true"
+  :slidesPerView="7"
   :pagination='{
     "clickable": true
   }' 
   :scrollbar='{
     "hide": true
   }'
+
 class="mySwiper">
-  <swiper-slide v-for="weatherData in weatherDatas" :key="weatherData.id">
-    {{ weatherData.locationName }}
+  <swiper-slide v-for="(weatherData, key) in weatherDatas">
+    <div class="city-name" @click="sendLocationName(weatherData.locationName)">
+      {{ weatherData.locationName }}
+    </div>
   </swiper-slide>
   </swiper>
 </template>
@@ -47,43 +53,52 @@ export default {
     };
   },
   methods: {
-    
-  }
-  
+    sendLocationName (locationName) {
+      this.$emit('selectLocationName', locationName)
+    }
+  },  
 }
 </script>
 
-<style>
+<style lang="sass">
 
-.swiper-container {
-  width: 100%;
-  height: 80px;
-}
+.swiper-container
+  width: 100%
+  height: 80px
 
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: none;
+.swiper-slide
+  text-align: center
+  font-size: 18px
+  background: none
 
-  /* Center slide text vertically */
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-}
+  // Center slide text vertically
+  display: -webkit-box
+  display: -ms-flexbox
+  display: -webkit-flex
+  display: flex
+  -webkit-box-pack: center
+  -ms-flex-pack: center
+  -webkit-justify-content: center
+  justify-content: center
+  -webkit-box-align: center
+  -ms-flex-align: center
+  -webkit-align-items: center
+  align-items: center
 
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+  &:hover > .city-name
+    background-color: rgba(80, 80, 80, 0.1)
+    border-radius: 15px
+    cursor: pointer
+    padding: 10px
+
+  img
+    display: block
+    width: 100%
+    height: 100%
+    object-fit: cover
+
+.swiper-slide-active
+  font-weight: bold
+  font-size: 22px
+
 </style>

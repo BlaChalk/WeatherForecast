@@ -1,6 +1,6 @@
 <template lang="pug">
 #weatherBox
-  .weatherDetail(v-for="weatherData in weatherDatas" v-show="weatherData.locationName === '臺中市'" @mouseleave="userSelectDay = 1")
+  .weatherDetail(v-for="weatherData in weatherDatas" v-show="weatherData.locationName === userSelectLocationName" @mouseleave="userSelectDay = 1")
     .top
       .background
       h3.weather-status {{ weatherData.weatherElement[6].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}
@@ -21,7 +21,7 @@
           .temperature
             h5.high {{ weatherData.weatherElement[12].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
             h5.low {{ weatherData.weatherElement[8].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
-  LocationSwiper.locationSwiper(:weatherDatas="weatherDatas")
+  LocationSwiper.locationSwiper(:weatherDatas="weatherDatas" @selectLocationName="setSelectLocationName")
           
 </template>
 
@@ -41,6 +41,7 @@ export default {
       weatherDatas: null,
       time: null,
       userSelectDay: 1,
+      userSelectLocationName: '臺中市'
     }
   },
   methods: {
@@ -73,6 +74,9 @@ export default {
       else {
         return (number-1)*2-1
       }
+    },
+    setSelectLocationName (locationName) {
+      this.userSelectLocationName = locationName
     }
   },
   mounted () {
