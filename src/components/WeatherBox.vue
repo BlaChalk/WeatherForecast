@@ -3,37 +3,24 @@
   .cityList(v-for="weatherData in weatherDatas" v-show="weatherData.locationName === '臺中市'")
     .top
       .background
-      h3.weather-status {{ weatherData.weatherElement[6].time[0].elementValue[0].value }}
+      h3.weather-status {{ weatherData.weatherElement[6].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}
       .weather-measures
-        .UVI 紫外線指數：{{ weatherData.weatherElement[9].time[0].elementValue[0].value }}
-        .RH 平均濕度：{{ weatherData.weatherElement[2].time[0].elementValue[0].value }}%
-        .PoP12h 降雨機率：{{ weatherData.weatherElement[0].time[0].elementValue[0].value }}%(12小時內)
+        .UVI 紫外線指數：{{ weatherData.weatherElement[9].time[userSelectDay-1].elementValue[0].value }}
+        .RH 平均濕度：{{ weatherData.weatherElement[2].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}%
+        .PoP12h 降雨機率：{{ weatherData.weatherElement[0].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}%(12小時內)
       .text-area
-        .temperature {{ weatherData.weatherElement[1].time[0].elementValue[0].value }}°C
+        .temperature {{ weatherData.weatherElement[1].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
         .infos
           .date {{ getDate() }}
           .time {{ getTimePerSecond() }}
           .address {{ weatherData.locationName }}
     .bottom
-      .dayweather(v-for="item in 7" :key="item.id")
-        .check(v-if="item === 1")
-          h4 {{ getDayOfTheWeek(weatherData.weatherElement[1].time[0].startTime) }}
+      .dayweather(v-for="item in 7" :key="item.id" :class="{selected: item===userSelectDay}" @click="showThisDay(item)")
+          h4 {{ getDayOfTheWeek(weatherData.weatherElement[1].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].startTime) }}
           WeatherIcon(:weatherIconValue="weatherData.weatherElement[6].time[item-1].elementValue[1].value")
           .temperature
-            h5.high {{ weatherData.weatherElement[12].time[0].elementValue[0].value }}°C
-            h5.low {{ weatherData.weatherElement[8].time[0].elementValue[0].value }}°C
-        .check(v-else-if="getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime) === '18'")
-          h4 {{ getDayOfTheWeek(weatherData.weatherElement[1].time[(item-1)*2].endTime) }}
-          WeatherIcon(:weatherIconValue="weatherData.weatherElement[6].time[item-1].elementValue[1].value")
-          .temperature
-            h5.high {{ weatherData.weatherElement[12].time[(item-1)*2].elementValue[0].value }}°C
-            h5.low {{ weatherData.weatherElement[8].time[(item-1)*2].elementValue[0].value }}°C
-        .check(v-else)
-          h4 {{ getDayOfTheWeek(weatherData.weatherElement[1].time[(item-1)*2-1].endTime) }}
-          WeatherIcon(:weatherIconValue="weatherData.weatherElement[6].time[item-1].elementValue[1].value")
-          .temperature
-            h5.high {{ weatherData.weatherElement[12].time[(item-1)*2-1].elementValue[0].value }}°C
-            h5.low {{ weatherData.weatherElement[8].time[(item-1)*2-1].elementValue[0].value }}°C
+            h5.high {{ weatherData.weatherElement[12].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
+            h5.low {{ weatherData.weatherElement[8].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
           
 </template>
 
@@ -49,7 +36,8 @@ export default {
   data() {
     return {
       weatherDatas: null,
-      time: null
+      time: null,
+      userSelectDay: 1,
     }
   },
   methods: {
@@ -68,6 +56,18 @@ export default {
     },
     getHourOfTheDay (value) {
       return moment(value).format('H')
+    },
+    showThisDay (value) {
+      this.userSelectDay = value
+    },
+    getWeatherArrayNumber (number, endTime) {
+      if (number === '1')
+        return 0
+      else if (endTime === '18') {
+        return (number-1)*2
+      } else {
+        return (number-1)*2-1
+      }
     }
   },
   mounted () {
@@ -192,47 +192,12 @@ $color_rain: #4DACFF
     width: calc( 100%/7 )
     margin: 0px 10px 0px 10px
     align-items: center
+    border-radius: 10px
+    &:hover
+      background-color: rgba($color_gray, 0.3)
+      cursor: pointer
     h4
       margin: 5px 0px 5px 0px
-    svg
-      width: 100%
-      max-width: 40px
-      height: 40px
-      .sun
-        fill: rgba($coler_yellow, 0.9)
-        animation: sun-breath 3s infinite
-      .cloud
-        fill: $color_gray
-        animation: cloud-drift 4s infinite
-      .rain
-        stroke: rgba($color_rain, 0.8)
-        animation: rain-drop 1.5s infinite linear
-      .rain2
-        animation-delay: -0.7s
-      .rain3
-        animation-delay: -0.3s
-      @keyframes sun-breath
-        0%
-          transform: scale(0.8)
-        50%
-          transform: scale(1)
-        100%
-          transform: scale(0.8)
-      @keyframes cloud-drift
-        0%
-          transform: translateY(0px)
-        50%
-          transform: translateY(-10px)
-        100%
-          transform: translateY(0px)
-      @keyframes rain-drop
-        0%
-          transform: translateY(0px)
-        85%
-          opacity: 1
-        100%
-          transform: translateY(45px)
-          opacity: 0
     .temperature
       display: flex
       opacity: 0
@@ -243,5 +208,8 @@ $color_rain: #4DACFF
         color: rgba($color_dark_red, 0.8)
       .low
         color: rgba($color_dark_blue, 0.6)
+  .selected
+    background-color: rgba($color_gray, 0.3)
+    cursor: pointer
 
 </style>
