@@ -3,16 +3,16 @@
   :slideToClickedSlide="true"
   :centeredSlides="true"
   :slidesPerView="7"
+  :mousewheel="true"
   :pagination='{
     "clickable": true
   }' 
   :scrollbar='{
     "hide": true
   }'
-
 class="mySwiper">
-  <swiper-slide v-for="(weatherData, key) in weatherDatas">
-    <div class="city-name" @click="sendLocationName(weatherData.locationName)">
+  <swiper-slide v-for="(weatherData, key) in weatherDatas" @click="sendLocation(key)" @wheel="mousewheel">
+    <div class="city-name">
       {{ weatherData.locationName }}
     </div>
   </swiper-slide>
@@ -31,11 +31,11 @@ import "swiper/components/scrollbar/scrollbar.min.css"
 
 // import Swiper core and required modules
 import SwiperCore, {
-  Scrollbar, Pagination, Navigation
+  Scrollbar, Pagination, Navigation, Mousewheel
 } from 'swiper/core';
 
 // install Swiper modules
-SwiperCore.use([Scrollbar]);
+SwiperCore.use([Scrollbar, Pagination, Navigation, Mousewheel]);
 
 
 export default {
@@ -44,7 +44,8 @@ export default {
     SwiperSlide,
   },
   props: {
-    weatherDatas: null
+    weatherDatas: null,
+    userSelectLocation: null
   },
   data() {
     return {
@@ -53,10 +54,19 @@ export default {
     };
   },
   methods: {
-    sendLocationName (locationName) {
-      this.$emit('selectLocationName', locationName)
+    sendLocation (locationNumber) {
+      this.$emit('selectLocation', locationNumber)
+    },
+    mousewheel (event) {
+      let direction = event.deltaY/150
+      let swiper = document.querySelector('.mySwiper').swiper
+
+      if (this.userSelectLocation>=0 && this.userSelectLocation<=this.weatherDatas.length) {
+        swiper.slideTo(this.userSelectLocation+direction)
+        this.$emit('changeLocation', direction)
+      }
     }
-  },  
+  },
 }
 </script>
 

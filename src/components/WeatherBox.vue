@@ -1,6 +1,6 @@
 <template lang="pug">
 #weatherBox
-  .weatherDetail(v-for="weatherData in weatherDatas" v-show="weatherData.locationName === userSelectLocationName" @mouseleave="userSelectDay = 1")
+  .weatherDetail(v-for="(weatherData, key) in weatherDatas" v-show="key === userSelectLocation" @mouseleave="userSelectDay = 1")
     .top
       .background
       h3.weather-status {{ weatherData.weatherElement[6].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}
@@ -16,12 +16,12 @@
           .address {{ weatherData.locationName }}
     .bottom
       .dayweather(v-for="item in 7" :key="item.id" :class="{selected: item===userSelectDay}" @click="showThisDay(item)")
-          h4 {{ getDayOfTheWeek(weatherData.weatherElement[1].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].startTime) }}
+          h4 {{ getDayOfTheWeek(item) }}
           WeatherIcon(:weatherIconValue="weatherData.weatherElement[6].time[item-1].elementValue[1].value")
           .temperature
             h5.high {{ weatherData.weatherElement[12].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
             h5.low {{ weatherData.weatherElement[8].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
-  LocationSwiper.locationSwiper(:weatherDatas="weatherDatas" @selectLocationName="setSelectLocationName")
+  LocationSwiper.locationSwiper(:userSelectLocation="userSelectLocation" :weatherDatas="weatherDatas" @selectLocation="setSelectLocation" @changeLocation="changeLocation")
           
 </template>
 
@@ -41,7 +41,7 @@ export default {
       weatherDatas: null,
       time: null,
       userSelectDay: 1,
-      userSelectLocationName: '臺中市'
+      userSelectLocation: 0
     }
   },
   methods: {
@@ -56,7 +56,7 @@ export default {
       return this.time
     },
     getDayOfTheWeek (value) {
-      return moment(value).format('ddd').toUpperCase() 
+      return moment().add(value-1, 'd').format('ddd').toUpperCase() 
     },
     getHourOfTheDay (value) {
       return moment(value).format('H')
@@ -65,19 +65,23 @@ export default {
       this.userSelectDay = value
     },
     getWeatherArrayNumber (number, endTime) {
-      if (number === 1) {
-        return 0
-      } 
-      else if (endTime === '18') {
+      if (endTime === '18') {
         return (number-1)*2
       } 
       else {
-        return (number-1)*2-1
+        return number*2-1
       }
     },
-    setSelectLocationName (locationName) {
-      this.userSelectLocationName = locationName
-    }
+    setSelectLocation (location) {
+      this.userSelectLocation = location
+    },
+    changeLocation (direction) {
+      let temp = this.userSelectLocation + direction
+        if (temp>=0 && temp<=21) {
+          this.userSelectLocation = temp
+          // console.log(this.userSelectLocation);
+        }
+    },
   },
   mounted () {
     // 臺灣各縣市鄉鎮未來1週逐12小時天氣預報
