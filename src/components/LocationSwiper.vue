@@ -111,4 +111,9 @@ export default {
   font-weight: bold
   font-size: 22px
 
+@media screen and (max-width: 600px)
+  .swiper-container
+    height: 105px
+  .city-name
+    writing-mode: vertical-lr
 </style>

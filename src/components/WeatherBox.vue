@@ -209,7 +209,7 @@ $color_rain: #4DACFF
     display: flex
     flex-direction: column
     width: calc( 100%/7 )
-    margin: 0px 10px 0px 10px
+    margin: 0px 10px
     align-items: center
     border-radius: 10px
     &:hover
@@ -230,5 +230,19 @@ $color_rain: #4DACFF
   .selected
     background-color: rgba($color_gray, 0.3)
     cursor: pointer
+
+@media screen and (max-width: 580px)
+  .background
+    background-position-x: center
+  .weatherDetail
+    &:hover
+      .bottom
+        height: 115px
+  .bottom  
+    height: 10px    
+    .dayweather
+      margin: 0px 5px
+      .temperature
+        flex-direction: column
 
 </style>
