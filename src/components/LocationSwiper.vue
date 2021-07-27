@@ -58,12 +58,14 @@ export default {
       this.$emit('selectLocation', locationNumber)
     },
     mousewheel (event) {
-      let direction = event.deltaY/150
       let swiper = document.querySelector('.mySwiper').swiper
 
-      if (this.userSelectLocation>=0 && this.userSelectLocation<=this.weatherDatas.length) {
-        swiper.slideTo(this.userSelectLocation+direction)
-        this.$emit('changeLocation', direction)
+      if (this.userSelectLocation>=0 && event.deltaY<1) {
+        swiper.slideTo(this.userSelectLocation-1)
+        this.$emit('changeLocation', -1)
+      } else if (this.userSelectLocation<=this.weatherDatas.length && event.deltaY>1) {
+        swiper.slideTo(this.userSelectLocation+1)
+        this.$emit('changeLocation', 1)
       }
     }
   },

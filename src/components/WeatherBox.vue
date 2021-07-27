@@ -232,6 +232,9 @@ $color_rain: #4DACFF
     cursor: pointer
 
 @media screen and (max-width: 580px)
+  #weatherBox
+    box-sizing: border-box
+    padding: 0px 12px
   .background
     background-position-x: center
   .weatherDetail
