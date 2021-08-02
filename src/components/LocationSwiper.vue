@@ -11,7 +11,7 @@
     "hide": true
   }'
 class="mySwiper">
-  <swiper-slide v-for="(weatherData, key) in weatherDatas" @click="sendLocation(key)" @wheel="mousewheel">
+  <swiper-slide v-for="(weatherData, key) in weatherDatas" @click="sendLocation(key)" @wheel="mousewheel" @touchend.pervent="swiperTouchEnd">
     <div class="city-name">
       {{ weatherData.locationName }}
     </div>
@@ -49,8 +49,7 @@ export default {
   },
   data() {
     return {
-        
-        
+      
     };
   },
   methods: {
@@ -67,6 +66,12 @@ export default {
         swiper.slideTo(this.userSelectLocation+1)
         this.$emit('changeLocation', 1)
       }
+    },
+    swiperTouchEnd (event) {
+      setTimeout(() => {
+        let swiper = document.querySelector('.mySwiper').swiper
+        this.sendLocation(swiper.activeIndex)
+      }, 10);
     }
   },
 }
