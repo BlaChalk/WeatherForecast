@@ -11,7 +11,7 @@
     "hide": true
   }'
 class="mySwiper">
-  <swiper-slide v-for="(weatherData, key) in weatherDatas" @click="sendLocation(key)" @wheel="mousewheel" @touchend.pervent="swiperTouchEnd">
+  <swiper-slide v-for="(weatherData, key) in weatherDatas" @click.pervent="setLocation(key)" @wheel.pervent="mousewheel" @touchend.pervent="swiperTouchEnd">
     <div class="city-name">
       {{ weatherData.locationName }}
     </div>
@@ -44,35 +44,48 @@ export default {
     SwiperSlide,
   },
   props: {
-    weatherDatas: null,
-    userSelectLocation: null
+    weatherDatas: {},
   },
   data() {
     return {
       
     };
   },
+  computed: {
+    currLocation: {
+      get(){
+        return this.$store.state.currLocation
+      },
+      set(value){
+        this.$store.commit('setcurrLocation', value)
+      }
+    }
+  },
   methods: {
-    sendLocation (locationNumber) {
-      this.$emit('selectLocation', locationNumber)
+    setLocation (locationNumber) {
+      this.currLocation = locationNumber
     },
     mousewheel (event) {
       let swiper = document.querySelector('.mySwiper').swiper
 
-      if (this.userSelectLocation>=0 && event.deltaY<1) {
-        swiper.slideTo(this.userSelectLocation-1)
-        this.$emit('changeLocation', -1)
-      } else if (this.userSelectLocation<=this.weatherDatas.length && event.deltaY>1) {
-        swiper.slideTo(this.userSelectLocation+1)
-        this.$emit('changeLocation', 1)
+      if (this.currLocation>0 && event.deltaY<1) {
+        this.currLocation -= 1
+      } 
+      else if (this.currLocation<this.weatherDatas.length-1 && event.deltaY>1) {
+        this.currLocation += 1
       }
+      swiper.slideTo(this.currLocation)
     },
     swiperTouchEnd (event) {
       setTimeout(() => {
         let swiper = document.querySelector('.mySwiper').swiper
-        this.sendLocation(swiper.activeIndex)
+        this.setLocation(swiper.activeIndex)
       }, 10);
     }
+  },
+  mounted() {
+    let swiper = document.querySelector('.mySwiper').swiper
+    swiper.slideTo(this.currLocation)
   },
 }
 </script>

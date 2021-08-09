@@ -1,6 +1,6 @@
 <template lang="pug">
 #weatherBox
-  .weatherDetail(v-for="(weatherData, key) in weatherDatas" v-show="key === userSelectLocation" @mouseleave="userSelectDay = 1")
+  .weatherDetail(v-for="(weatherData, key) in weatherDatas" v-show="key === currLocation" @mouseleave="userSelectDay = 1")
     .top
       .background
       h3.weather-status {{ weatherData.weatherElement[6].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}
@@ -21,7 +21,7 @@
           .temperature
             h5.high {{ weatherData.weatherElement[12].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
             h5.low {{ weatherData.weatherElement[8].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
-  LocationSwiper.locationSwiper(:userSelectLocation="userSelectLocation" :weatherDatas="weatherDatas" @selectLocation="setSelectLocation" @changeLocation="changeLocation")
+  LocationSwiper.locationSwiper(:weatherDatas="weatherDatas")
           
 </template>
 
@@ -41,7 +41,16 @@ export default {
       weatherDatas: null,
       time: null,
       userSelectDay: 1,
-      userSelectLocation: 0
+    }
+  },
+  computed: {
+    currLocation: {
+      get(){
+        return this.$store.state.currLocation
+      },
+      set(value){
+        this.$store.commit('setcurrLocation', value)
+      }
     }
   },
   methods: {
@@ -71,16 +80,6 @@ export default {
       else {
         return number*2-1
       }
-    },
-    setSelectLocation (location) {
-      this.userSelectLocation = location
-    },
-    changeLocation (direction) {
-      let temp = this.userSelectLocation + direction
-        if (temp>=0 && temp<=21) {
-          this.userSelectLocation = temp
-          // console.log(this.userSelectLocation);
-        }
     },
   },
   mounted () {
