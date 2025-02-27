@@ -20,8 +20,9 @@
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
+    "@vue/language-plugin-pug": "^2.2.4",
     "axios": "^0.18.0",
-    "node-sass": "^4.12.0",
+    "sass": "^1.85.1",
     "sass-loader": "^8.0.2",
     "vue-cli-plugin-axios": "~0.0.4",
     "vue-cli-plugin-pug": "~2.0.0"
@@ -30,5 +31,6 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "packageManager": "yarn@4.6.0"
 }
