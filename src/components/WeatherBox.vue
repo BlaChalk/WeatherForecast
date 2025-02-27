@@ -3,24 +3,24 @@
   .weatherDetail(v-for="(weatherData, key) in weatherDatas" v-show="key === currLocation" @mouseleave="userSelectDay = 1")
     .top
       .background
-      h3.weather-status {{ weatherData.weatherElement[6].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}
+      h3.weather-status {{ weatherData.WeatherElement[6].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MinApparentTemperature }}
       .weather-measures
-        .UVI 紫外線指數：{{ weatherData.weatherElement[9].time[userSelectDay-1].elementValue[0].value }}
-        .RH 平均濕度：{{ weatherData.weatherElement[2].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}%
-        .PoP12h 降雨機率：{{ weatherData.weatherElement[0].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}%(12小時內)
+        .UVI 紫外線指數：{{ weatherData.WeatherElement[13].Time[userSelectDay-1].ElementValue[0].UVIndex }}({{ weatherData.WeatherElement[13].Time[userSelectDay-1].ElementValue[0].UVExposureLevel }})
+        .RH 平均相對濕度：{{ weatherData.WeatherElement[4].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].RelativeHumidity }}%
+        .PoP12h 降雨機率：{{ weatherData.WeatherElement[11].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].ProbabilityOfPrecipitation }}%(12小時內)
       .text-area
-        .temperature {{ weatherData.weatherElement[1].time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
+        .temperature {{ weatherData.WeatherElement[1].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MinApparentTemperature }}°C
         .infos
           .date {{ getDate() }}
           .time {{ getTimePerSecond() }}
-          .address {{ weatherData.locationName }}
+          .address {{ weatherData.LocationName }}
     .bottom
       .dayweather(v-for="item in 7" :key="item.id" :class="{selected: item===userSelectDay}" @click="showThisDay(item)")
           h4 {{ getDayOfTheWeek(item) }}
-          WeatherIcon(:weatherIconValue="weatherData.weatherElement[6].time[item-1].elementValue[1].value")
+          WeatherIcon(:weatherIconValue="weatherData.WeatherElement[6].Time[item-1].ElementValue[0].MinApparentTemperature")
           .temperature
-            h5.high {{ weatherData.weatherElement[12].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
-            h5.low {{ weatherData.weatherElement[8].time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.weatherElement[1].time[0].endTime))].elementValue[0].value }}°C
+            h5.high {{ weatherData.WeatherElement[12].Time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MinApparentTemperature }}°C
+            h5.low {{ weatherData.WeatherElement[8].Time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MinApparentTemperature }}°C
   LocationSwiper.locationSwiper(:weatherDatas="weatherDatas")
           
 </template>
@@ -85,10 +85,9 @@ export default {
   mounted () {
     // 臺灣各縣市鄉鎮未來1週逐12小時天氣預報
     axios
-    .get('https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-093?Authorization=CWB-262367AE-AD07-4CEB-88B6-3D6237F6A839&locationId=F-D0047-091')
+    .get('https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-D0047-093?Authorization=CWB-262367AE-AD07-4CEB-88B6-3D6237F6A839&locationId=F-D0047-091')
     .then(response => {
-      // console.log(response.data)
-      this.weatherDatas = response.data.records.locations[0].location
+      this.weatherDatas = response.data.records.Locations[0].Location
     })
     .catch((error) => {
       if (error.response) {

@@ -13,7 +13,7 @@
 class="mySwiper">
   <swiper-slide v-for="(weatherData, key) in weatherDatas" @click.pervent="setLocation(key)" @wheel.pervent="mousewheel" @touchend.pervent="swiperTouchEnd">
     <div class="city-name">
-      {{ weatherData.locationName }}
+      {{ weatherData.LocationName }}
     </div>
   </swiper-slide>
   </swiper>
