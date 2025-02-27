@@ -11,8 +11,8 @@
       .text-area
         .temperature {{ weatherData.WeatherElement[0].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].Temperature }}°C
         .infos
-          .date {{ getDate() }}
-          .time {{ getTimePerSecond() }}
+          .date {{ getDate }}
+          .time {{ getTimePerSecond }}
           .address {{ weatherData.LocationName }}
     .bottom
       .dayweather(v-for="item in 7" :key="item.id" :class="{selected: item===userSelectDay}" @click="showThisDay(item)")
@@ -51,19 +51,23 @@ export default {
       set(value){
         this.$store.commit('setcurrLocation', value)
       }
-    }
-  },
-  methods: {
-    getDate () {
-      return moment().add(this.userSelectDay-1, 'd').format('MMMM D') 
     },
-    getTimePerSecond () {
+    getDate: {
+      get(){
+        return moment().add(this.userSelectDay-1, 'd').format('MMMM D') 
+      }
+    },
+    getTimePerSecond: {
+      get(){
       this.time = moment().add(this.userSelectDay-1, 'd').format('ddd HH:mm') 
       setInterval(() => {
         this.time = moment().add(this.userSelectDay-1, 'd').format('ddd HH:mm') 
       }, 1000);
       return this.time
+    }
     },
+  },
+  methods: {
     getDayOfTheWeek (value) {
       return moment().add(value-1, 'd').format('ddd').toUpperCase() 
     },
