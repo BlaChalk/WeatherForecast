@@ -3,13 +3,13 @@
   .weatherDetail(v-for="(weatherData, key) in weatherDatas" v-show="key === currLocation" @mouseleave="userSelectDay = 1")
     .top
       .background
-      h3.weather-status {{ weatherData.WeatherElement[6].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MinApparentTemperature }}
+      h3.weather-status {{ weatherData.WeatherElement[12].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].Weather }}
       .weather-measures
         .UVI 紫外線指數：{{ weatherData.WeatherElement[13].Time[userSelectDay-1].ElementValue[0].UVIndex }}({{ weatherData.WeatherElement[13].Time[userSelectDay-1].ElementValue[0].UVExposureLevel }})
         .RH 平均相對濕度：{{ weatherData.WeatherElement[4].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].RelativeHumidity }}%
         .PoP12h 降雨機率：{{ weatherData.WeatherElement[11].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].ProbabilityOfPrecipitation }}%(12小時內)
       .text-area
-        .temperature {{ weatherData.WeatherElement[1].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MinApparentTemperature }}°C
+        .temperature {{ weatherData.WeatherElement[0].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].Temperature }}°C
         .infos
           .date {{ getDate() }}
           .time {{ getTimePerSecond() }}
@@ -19,8 +19,8 @@
           h4 {{ getDayOfTheWeek(item) }}
           WeatherIcon(:weatherIconValue="weatherData.WeatherElement[6].Time[item-1].ElementValue[0].MinApparentTemperature")
           .temperature
-            h5.high {{ weatherData.WeatherElement[12].Time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MinApparentTemperature }}°C
-            h5.low {{ weatherData.WeatherElement[8].Time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MinApparentTemperature }}°C
+            h5.high {{ weatherData.WeatherElement[1].Time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MaxTemperature }}°C
+            h5.low {{ weatherData.WeatherElement[2].Time[getWeatherArrayNumber(item, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].MinTemperature }}°C
   LocationSwiper.locationSwiper(:weatherDatas="weatherDatas")
           
 </template>
