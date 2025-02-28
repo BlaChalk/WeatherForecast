@@ -1,21 +1,21 @@
 <template lang="pug">
 #weatherBox
-  .weatherDetail(v-for="(weatherData, key) in weatherDatas" v-show="key === currLocation" @mouseleave="userSelectDay = 1")
+  .weatherDetail(v-for="(weatherData, key) in weatherDatas" v-show="key === currLocation" @mouseleave="selectedWeek = 1")
     .top
       .background
-      h3.weather-status {{ weatherData.WeatherElement[12].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].Weather }}
+      h3.weather-status {{ weatherData.WeatherElement[12].Time[getWeatherArrayNumber(selectedWeek, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].Weather }}
       .weather-measures
-        .UVI 紫外線指數：{{ weatherData.WeatherElement[13].Time[userSelectDay-1].ElementValue[0].UVIndex }}({{ weatherData.WeatherElement[13].Time[userSelectDay-1].ElementValue[0].UVExposureLevel }})
-        .RH 平均相對濕度：{{ weatherData.WeatherElement[4].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].RelativeHumidity }}%
-        .PoP12h 降雨機率：{{ weatherData.WeatherElement[11].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].ProbabilityOfPrecipitation }}%(12小時內)
+        .UVI 紫外線指數：{{ weatherData.WeatherElement[13].Time[selectedWeek-1].ElementValue[0].UVIndex }}({{ weatherData.WeatherElement[13].Time[selectedWeek-1].ElementValue[0].UVExposureLevel }})
+        .RH 平均相對濕度：{{ weatherData.WeatherElement[4].Time[getWeatherArrayNumber(selectedWeek, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].RelativeHumidity }}%
+        .PoP12h 降雨機率：{{ weatherData.WeatherElement[11].Time[getWeatherArrayNumber(selectedWeek, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].ProbabilityOfPrecipitation }}%(12小時內)
       .text-area
-        .temperature {{ weatherData.WeatherElement[0].Time[getWeatherArrayNumber(userSelectDay, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].Temperature }}°C
+        .temperature {{ weatherData.WeatherElement[0].Time[getWeatherArrayNumber(selectedWeek, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].Temperature }}°C
         .infos
           .date {{ getDate }}
           .time {{ getTimePerSecond }}
           .address {{ weatherData.LocationName }}
     .bottom
-      .dayweather(v-for="item in 7" :key="item.id" :class="{selected: item===userSelectDay}" @click="showThisDay(item)")
+      .dayweather(v-for="item in 7" :key="item.id" :class="{selected: item===selectedWeek}" @click="showThisDay(item)")
           h4 {{ getDayOfTheWeek(item) }}
           WeatherIcon(:weatherIconValue="weatherData.WeatherElement[6].Time[item-1].ElementValue[0].MinApparentTemperature")
           .temperature
@@ -40,7 +40,7 @@ export default {
     return {
       weatherDatas: null,
       time: null,
-      userSelectDay: 1,
+      selectedWeek: 1,
     }
   },
   computed: {
@@ -54,14 +54,14 @@ export default {
     },
     getDate: {
       get(){
-        return moment().add(this.userSelectDay-1, 'd').format('MMMM D') 
+        return moment().add(this.selectedWeek-1, 'd').format('MMMM D') 
       }
     },
     getTimePerSecond: {
       get(){
-      this.time = moment().add(this.userSelectDay-1, 'd').format('ddd HH:mm') 
+      this.time = moment().add(this.selectedWeek-1, 'd').format('ddd HH:mm') 
       setInterval(() => {
-        this.time = moment().add(this.userSelectDay-1, 'd').format('ddd HH:mm') 
+        this.time = moment().add(this.selectedWeek-1, 'd').format('ddd HH:mm') 
       }, 1000);
       return this.time
     }
@@ -75,7 +75,7 @@ export default {
       return moment(value).format('H')
     },
     showThisDay (value) {
-      this.userSelectDay = value
+      this.selectedWeek = value
     },
     getWeatherArrayNumber (number, endTime) {
       if (endTime === '18') {
