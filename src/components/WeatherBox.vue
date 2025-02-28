@@ -15,7 +15,7 @@
           .time {{ getTimePerSecond }}
           .address {{ weatherData.LocationName }}
     .bottom
-      .dayweather(v-for="item in 7" :key="item.id" :class="{selected: item===selectedWeek}" @click="showThisDay(item)")
+      .dayweather(v-for="item in 7" :key="item" :class="{selected: item===selectedWeek}" @click="showThisDay(item)")
           h4 {{ getDayOfTheWeek(item) }}
           WeatherIcon(:weatherIconValue="weatherData.WeatherElement[6].Time[item-1].ElementValue[0].MinApparentTemperature")
           .temperature
