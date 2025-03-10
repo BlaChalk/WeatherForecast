@@ -29,8 +29,9 @@ git commit -m 'deploy'
 
 echo "Push to Github"
 # 部署到 https://github.com/BlaChalk/WeatherForecast.git 分支為 gh-pages
-git push -f https://github.com/BlaChalk/WeatherForecast.git master:gh-pages
+git push -f https://github.com/BlaChalk/WeatherForecast.git gh-pages
 #將dist資料夾中的內容推送至遠端的gh-pages分支中，並強制無條件將舊有的內容取代成目前的內容（指令 git push -f)
+
 echo "Deploy Successfully!"
 
 cd ..
