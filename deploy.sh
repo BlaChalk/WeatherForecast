@@ -11,10 +11,19 @@ yarn build
 # 移動至到打包後的dist目錄 
 cd dist
 
-echo "Commit deploy"
-git config user.email "black00731@gmail.com"
-git config user.name "BlaChalk"
+echo "Initialize git repository"
 git init #因為dist資料夾預設是被ignore的，因此在進入dist資料夾後初始化git
+git branch -m gh-pages
+
+git config --local user.email "black00731@gmail.com"
+git config --local user.name "BlaChalk"
+
+export GIT_COMMITTER_NAME="BlaChalk"
+export GIT_COMMITTER_EMAIL="black00731@gmail.com"
+export GIT_AUTHOR_NAME="BlaChalk"
+export GIT_AUTHOR_EMAIL="black00731@gmail.com"
+
+echo "Commit deploy"
 git add -A
 git commit -m 'deploy'
 
