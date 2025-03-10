@@ -3,13 +3,13 @@
   .weatherDetail(v-for="(weatherData, key) in weatherDatas" v-show="key === currLocation" @mouseleave="selectedWeek = 1")
     .top
       .background
-      h3.weather-status {{ weatherData.WeatherElement[12].Time[getWeatherArrayNumber(selectedWeek, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].Weather }}
+      h3.weather-status {{ weatherData.WeatherElement[12].Time[getTimeIndex].ElementValue[0].Weather }}
       .weather-measures
         .UVI 紫外線指數：{{ weatherData.WeatherElement[13].Time[selectedWeek-1].ElementValue[0].UVIndex }}({{ weatherData.WeatherElement[13].Time[selectedWeek-1].ElementValue[0].UVExposureLevel }})
-        .RH 平均相對濕度：{{ weatherData.WeatherElement[4].Time[getWeatherArrayNumber(selectedWeek, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].RelativeHumidity }}%
-        .PoP12h 降雨機率：{{ weatherData.WeatherElement[11].Time[getWeatherArrayNumber(selectedWeek, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].ProbabilityOfPrecipitation }}%(12小時內)
+        .RH 平均相對濕度：{{ weatherData.WeatherElement[4].Time[getTimeIndex].ElementValue[0].RelativeHumidity }}%
+        .PoP12h 降雨機率：{{ weatherData.WeatherElement[11].Time[getTimeIndex].ElementValue[0].ProbabilityOfPrecipitation }}%(12小時內)
       .text-area
-        .temperature {{ weatherData.WeatherElement[0].Time[getWeatherArrayNumber(selectedWeek, getHourOfTheDay(weatherData.WeatherElement[1].Time[0].EndTime))].ElementValue[0].Temperature }}°C
+        .temperature {{ weatherData.WeatherElement[0].Time[getTimeIndex].ElementValue[0].Temperature }}°C
         .infos
           .date {{ getDate }}
           .time {{ getTimePerSecond }}
@@ -50,6 +50,11 @@ export default {
       },
       set(value){
         this.$store.commit('setcurrLocation', value)
+      }
+    },
+    getTimeIndex: {
+      get(){
+        return this.getWeatherArrayNumber(this.selectedWeek, this.getHourOfTheDay(this.weatherDatas[0].WeatherElement[1].Time[0].EndTime))
       }
     },
     getDate: {
