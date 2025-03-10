@@ -4,6 +4,7 @@
     .top
       .background
       h3.weather-status {{ weatherData.WeatherElement[12].Time[getTimeIndex].ElementValue[0].Weather }}
+      h3.weather-description {{ weatherData.WeatherElement[14].Time[getTimeIndex].ElementValue[0].WeatherDescription }}
       .weather-measures
         .UVI 紫外線指數：{{ weatherData.WeatherElement[13].Time[selectedWeek-1].ElementValue[0].UVIndex }}({{ weatherData.WeatherElement[13].Time[selectedWeek-1].ElementValue[0].UVExposureLevel }})
         .RH 平均相對濕度：{{ weatherData.WeatherElement[4].Time[getTimeIndex].ElementValue[0].RelativeHumidity }}%
@@ -175,6 +176,15 @@ $color_rain: #4DACFF
     top: 5px
     opacity: 1
     transition: 0.5s
+  .weather-description
+    position: absolute
+    right: 20px
+    top: 0px
+    width: 50%
+    font-weight: normal
+    text-align: left
+    opacity: 0
+    transition: 0.5s
   .weather-measures
     display: flex
     flex-direction: column
@@ -255,4 +265,10 @@ $color_rain: #4DACFF
       .temperature
         flex-direction: column
 
+@media screen and (min-width: 720px)
+  .weatherDetail
+    &:hover
+      .top
+        .weather-description
+          opacity: 1
 </style>
